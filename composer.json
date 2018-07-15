@@ -1,0 +1,19 @@
+{
+        "name": "culv3r/xf2bridge",
+            "description": "A bridge to interface between laravel and Xenforo 2",
+                "keywords": ["Xenforo 2", "Laravel 5", "Auth", "Bridge"],
+                    "type": "library",
+                    "authors": [
+                        {
+                                "name": "Danny Larsen"
+                                                            
+                        }
+                            
+                    ],
+                    "require": {
+                                "php": ">=7.1.0"
+                                    
+                    },
+                    "minimum-stability": "dev"
+
+}
