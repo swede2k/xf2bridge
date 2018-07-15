@@ -1,9 +1,7 @@
-XenforoBridge
-=============
+XF2Bridge
+=========
 
-Simple to use XenForo bridge library. The goal of this package is to allow developer to easily integrate their existing/new application with XenForo Forum Platfrom. This package is still heavily underdevelopment so use with caution. I have also included a ServiceProvider to use within a Laravel application.
-
-If you would like to see this package in action we are currently using for [AstronomyConnect.com - ItemHub Database](http://astronomyconnect.com/items). This is a Laravel 5 app with Xenforo sitting within the public folder. Templates have been designed and implemented in Xenforo and are being rendered by this bridge instead of using Blade.
+Fork of [URB/XenforoBridge](https://github.com/UnderRatedBrilliance/XenforoBridge) which is refactored to be utilized in Xenforo 2 without legacy support.
 
 Installation
 ------------
@@ -13,21 +11,22 @@ Install the XenforoBridge package with Composer by adding the folowing to your c
 ```json
 {
     "require": {
-        "urb/xenforobridge": "dev-master"
-    }
+        "culv3r/xf2bridge": "dev-master"
+    },
+    "repositories": [
+        { 
+            "type": "vcs",
+            "url": "https://github.com/culv3r/xf2bridge"
+        }
+],
 }
-```
-Or by using the composer require command
-
-```
-composer require urb/xenforobridge:dev-master
 ```
 
 To install XenforoBridge into Laravel 5 simple add the following service provider to your 'config/app.php' in the 'providers' array:
 
 ```php
 'providers' => array(
-		'Urb\XenforoBridge\XenforoBridgeServiceProvider::class',
+		'culv3r\XF2Bridge\XF2BridgeServiceProvider::class',
 )
 
 ```
@@ -38,7 +37,7 @@ Then publish the config file with
 php artisan vendor:publish
 ```
 
-This will add the file 'config/xenforobridge.php'. This is where you will place the needed configurations to use the Xenforo Bridge.
+This will add the file 'config/xf2bridge.php'. This is where you will place the needed configurations to use the Xenforo Bridge.
 
 Within this config file you will need to supply the full directory path to your XenForo installation and the base url path like the example below
 
