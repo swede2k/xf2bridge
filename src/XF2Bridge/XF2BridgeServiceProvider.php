@@ -37,7 +37,7 @@ class XF2BridgeServiceProvider extends ServiceProvider {
 
     	if(config('xf2bridge.use_xenforo_auth') === true)
         {
-            \Auth::extend('xenforo',function($app) {
+            \Auth::extend('xf2bridge',function($app) {
 
                 return new XF2Guard($app->make(XF2Bridge::class));
             });
