@@ -1,4 +1,4 @@
-<?php namespace Urb\XenforoBridge\Contracts;
+<?php namespace culv3r\XF2Bridge\Contracts;
 
 interface VisitorInterface
 {
