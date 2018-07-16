@@ -2,7 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 
-class XenforoBridgeServiceProvider extends ServiceProvider {
+class XF2BridgeServiceProvider extends ServiceProvider {
 
 	/**
 	 * Indicates if loading of the provider is deferred.
