@@ -88,9 +88,18 @@ class XF2Bridge
      */
     protected function bootstrapXenforo($directoryPath)
     {
-        XenForo_Autoloader::getInstance()->setupAutoloader($directoryPath .'/library');
-        \XF::app()::initialize($directoryPath . '/library', $directoryPath);
-        XenForo_Session::startPublicSession();
+    /** 
+     * @var  $fileDir 
+     */
+
+    $fileDir = $directoryPath;
+    require( $fileDir . '/src/XF.php' );
+
+    \XF::start($fileDir);
+
+    $app = \XF::setupApp('XF\Pub\App');
+    $app->start();
+    //XenForo_Session::startPublicSession();
     }
 
     /**
