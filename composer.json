@@ -14,6 +14,11 @@
                                 "php": ">=7.1.0"
                                     
                     },
+                    "autoload":{
+                        "psr-4":{
+                            "culv3r\\XF2Bridge\\" : "src/XF2Bridge"
+                        }
+                    },
                     "minimum-stability": "dev"
 
 }
