@@ -23,10 +23,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "swede2k\\XF2Bridge\\ServiceProvider"
+                "swede2k\\XF2Bridge\\XF2BridgeServiceProvider"
             ],
             "aliases": {
-                "XF2Bridge": "swede2k\\XF2Bridge\\Facade"
+                "XF2Bridge": "swede2k\\XF2Bridge\\Facades\\XF2Bridge"
             }
         }
     }
