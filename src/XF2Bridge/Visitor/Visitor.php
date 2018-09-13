@@ -3,7 +3,6 @@
 namespace swede2k\XF2Bridge\Visitor;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use swede2k\XF2Bridge\Visitor\VisitorInterface;
 
 class Visitor implements VisitorInterface, Authenticatable
 {
@@ -29,7 +28,7 @@ class Visitor implements VisitorInterface, Authenticatable
 
     public function isLoggedIn()
     {
-        return (bool)$this->getCurrentVisitor()->getUserId();
+        return (bool)$this->getUserId();
     }
 
     public function hasPermission($group,$permission)
