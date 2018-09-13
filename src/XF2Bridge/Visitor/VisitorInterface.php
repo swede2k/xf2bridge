@@ -1,6 +1,6 @@
 <?php
 
-namespace swede2k\XF2Bridge\Contracts;
+namespace swede2k\XF2Bridge\Visitor;
 
 interface VisitorInterface
 {
