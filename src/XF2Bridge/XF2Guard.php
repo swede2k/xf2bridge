@@ -1,24 +1,15 @@
 <?php
-/**
- * Copyright (C) Stellaron, Inc - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by George Barba <george@agenaastro.com>, September 2017
- */
 
-namespace culv3r\XF2Bridge;
+namespace swede2k\XF2Bridge;
 
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 
 class XF2Guard implements Guard
 {
-    protected $user;
     protected $xenforo;
-
+    protected $user;
 
     public function __construct(XF2Bridge $xenforo)
     {
@@ -66,9 +57,6 @@ class XF2Guard implements Guard
     public function setUser(Authenticatable $user)
     {
         $this->user = $user;
-
         return $this;
     }
-
-
 }

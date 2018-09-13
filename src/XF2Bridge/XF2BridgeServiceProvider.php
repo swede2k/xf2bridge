@@ -1,8 +1,8 @@
-<?php namespace culv3r\XF2Bridge;
+<?php
 
-use Illuminate\Support\ServiceProvider;
+namespace swede2k\XF2Bridge;
 
-class XF2BridgeServiceProvider extends ServiceProvider {
+class XF2BridgeServiceProvider extends \Illuminate\Support\ServiceProvider {
 
 	/**
 	 * Indicates if loading of the provider is deferred.
@@ -18,6 +18,10 @@ class XF2BridgeServiceProvider extends ServiceProvider {
 	 */
 	public function register()
     {
+        $this->mergeConfigFrom(
+            __DIR__ .'/../config/xf2bridge.php', 'xf2bridge'
+        );
+
         $this->app->singleton(XF2Bridge::class, function($app) {
             //Set Bridge loaded to true
             $app['XF2Bridge.loaded'] = true;
@@ -27,13 +31,14 @@ class XF2BridgeServiceProvider extends ServiceProvider {
 
             return new XF2Bridge($xenforoDir, $xenforoBaseUrl);
         });
+        $this->app->alias(XF2Bridge::class, 'xf2bridge');
     }
         
     public function boot()
     {
-    	$configPath = __DIR__ .'/../config/xf2bridge.php';
-    	$this->publishes([$configPath => config_path('xf2bridge.php')], 'config');
-
+        $this->publishes([
+            __DIR__ .'/../config/xf2bridge.php' => config_path('xf2bridge.php'),
+        ]);
 
     	if(config('xf2bridge.use_xenforo_auth') === true)
         {

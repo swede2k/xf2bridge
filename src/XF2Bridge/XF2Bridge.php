@@ -1,152 +1,62 @@
-<?php namespace culv3r\XF2Bridge;
+<?php
 
-/**
- * Contracts and Exceptions
- */
-use XenForo_Model;
-use culv3r\XF2Bridge\Contracts\TemplateInterface;
-use culv3r\XF2Bridge\Contracts\VisitorInterface;
-use culv3r\XF2Bridge\Contracts\UserInterface;
-use culv3r\XF2Bridge\Exceptions\XenforoAutoloaderException;
+namespace swede2k\XF2Bridge;
 
-/**
- * Default XF2Bridge
- * Implementations
- */
-use culv3r\XF2Bridge\Template\Template;
-use culv3r\XF2Bridge\Visitor\Visitor;
-use culv3r\XF2Bridge\User\User;
-
-/**
- * Required XenForo Classes
- */
-use XenForo_Autoloader;
-use XenForo_Session;
-use XenForo_Options;
-
+use swede2k\XF2Bridge\Visitor\VisitorInterface;
+use swede2k\XF2Bridge\Visitor\Visitor;
 
 
 class XF2Bridge
 {
     /**
-     * Xenforo Option Id for the boards base url
-     */
-    const XENFORO_OPTION_BASE_URL = 'boardUrl';
+    * Absolute Path to Xenforo Directory
+    * (ex. /home/username/www/forums/ )
+    *
+    * @var string
+    */
+    protected $directoryPath;
 
     /**
-     * Default language id for Xenforo
-     */
-    const XENFOROBRIDGE_DEFAULT_LANGUAGE_ID = 1;
+    * Base Url to Xenforo Application
+    * (ex. http://example.com/forums | http://example.com)
+    *
+    * @var string
+    */
+    protected $baseUrl;
 
     /**
-     * Absolute Path to Xenforo Directory
-     * (ex. /home/username/www/forums/ )
-     *
-     * @var string
-     */
-    protected $xenforoDirectoryPath;
-
-    /**
-     * Base Url to Xenforo Application
-     * (ex. http://example.com/forums | http://example.com)
-     *
-     * @var string
-     */
-    protected $xenforoBaseUrl;
-
-
-    /**
-     * @var VisitorInterface
-     */
+    * @var VisitorInterface
+    */
     protected $visitor;
 
     /**
-     * @var UserInterface
-     */
-    protected $user;
-
-    /**
-     * Bootstrap XF2Bridge
-     *
-     *
-     * @param $xenforoDirectoryPath
-     * @param null|string $xenforoBaseUrl
-     * @throws XenforoAutoloaderException
-     */
-    public function __construct($xenforoDirectoryPath)
+    * Bootstrap XF2Bridge
+    *
+    * @param $directoryPath
+    * @param $baseUrl
+    * @throws \Exception
+    */
+    public function __construct($directoryPath, $baseUrl)
     {
-        $this->xenforoDirectoryPath = $xenforoDirectoryPath;
-
-        //Bootstrap Xenforo App
-        $this->bootstrapXenforo($this->xenforoDirectoryPath);
+        $this->directoryPath = $directoryPath;
+        $this->baseUrl = $baseUrl;
+        //load Xenforo 2 app
+        $this->bootstrapXenforo();
     }
 
     /**
-     * Bootstrap Xenforo Application and Start a Public Session
-     *
-     * @param string $directoryPath
-     */
-    protected function bootstrapXenforo($directoryPath)
+    * Bootstrap Xenforo 2 Application
+    * @throws \Exception
+    */
+    protected function bootstrapXenforo()
     {
-    /** 
-     * @var  $fileDir 
-     */
-
-    $fileDir = $directoryPath;
-    require( $fileDir . '/src/XF.php' );
-
-    \XF::start($fileDir);
-
-    $app = \XF::setupApp('XF\Pub\App');
-    $app->start();
-    //XenForo_Session::startPublicSession();
+        $path = $this->directory_path . '/src/XF.php';
+        if( file_exists($path) && is_readable($path) && require_once($path)) {
+            \XF::start($this->directory_path);
+            $this->app = \XF::setupApp('XF\Pub\App');
+        } else
+            throw new \Exception('Could not load XenForo check path: ' . $path);
     }
-
-    /**
-     * Get all Xenforo Options
-     *
-     * @return mixed|XenForo_Options
-     * @throws \Zend_Exception
-     */
-    public function getXenforoOptions()
-    {
-        if(!$this->xenforoOptions instanceof XenForo_Options)
-        {
-            $this->xenforoOptions = \XF::app()::get('options');
-        }
-        return $this->xenforoOptions;
-    }
-
-    /**
-     * Get Xenforo Option by id
-     *
-     * @param string $id
-     * @return mixed|null
-     */
-    public function getXenforoOptionById($id)
-    {
-        return $this->getXenforoOptions()->get($id);
-    }
-
-    /**
-     * Attempts to load Xenforo_Autoloader.php throws exception if
-     * unable to find or load.
-     *
-     * @param string $xenforoDirectory - Full path to Xenforo Directory
-     * @return bool
-     * @throws XenforoAutoloaderException
-     */
-	protected function loadXenAutoloader($xenforoDirectory)
-	{
-		$path = $xenforoDirectory. '/library/XenForo/Autoloader.php';
-
-		$autoloader = include_once($path);
-
-		if(!$autoloader)
-		{
-			throw new XenforoAutoloaderException('Could not load XenForo_Autoloader.php check path');
-		}
-	}
 
     /**
      * Retrieve Visitor Class
@@ -155,6 +65,7 @@ class XF2Bridge
      */
     public function retrieveVisitor()
     {
+
         if(!$this->visitor instanceof VisitorInterface)
         {
             $this->setVisitor(new Visitor);
@@ -256,131 +167,6 @@ class XF2Bridge
     }
 
     /**
-     * Return current implementation or set Default User
-     *
-     * @return UserInterface
-     */
-    public function retrieveUser()
-    {
-        if(!$this->user instanceof UserInterface)
-        {
-            $this->setUser(new User);
-        }
-
-        return $this->user;
-    }
-
-    /**
-     * Set current implementation of User
-     *
-     * @param UserInterface $user
-     */
-    public function setUser(UserInterface $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * Return current User implementation
-     *
-     * @return UserInterface
-     */
-    public function getUser()
-    {
-        return $this->retrieveUser();
-    }
-
-    /**
-     * Find User by Id
-     *
-     * @param $id
-     * @return array
-     */
-	public function getUserById($id)
-	{
-		return $this->getUser()->getUserById($id);
-	}
-
-	/**
-	 * Retrieve Xenforo User by Email
-	 *
-	 * If no user is found returns empty array
-	 *
-	 * @param $email
-	 * @return array
-	 */
-	public function getUserByEmail($email)
-	{
-		return $this->getUser()->getUserByEmail($email);
-	}
-
-    /**
-     * Get Xenforo User by Username - if no user is found returns empty array
-     *
-     * @param $name
-     * @return array
-     */
-	public function getUserByName($name)
-	{
-		return $this->getUser()->getUserByUsername($name);
-	}
-
-
-    /**
-     * Login and set user session to user id (No Validation is used on this method)
-     *
-     * @param (int) $user
-     * @param bool|false $remember
-     * @param bool|true $log
-     * @return mixed
-     */
-    public function loginAsUser($user, $remember = false,$log = true)
-    {
-        // Set Remember Cookie
-        if($remember)
-        {
-            /* @var \XenForo_Model_User */
-            $this->getXenforoModel('XenForo_Model_User')->setUserRememberCookie($user);
-        }
-
-        //Log IP
-        if($log)
-        {
-            /* @var XenForo_Model_Ip */
-            $this->getXenforoModel('XenForo_Model_Ip')->logIp($user,'user',$user,'login');
-        }
-
-        $this->changeUserSession($user);
-
-        return $user;
-    }
-
-    /**
-     * Changes the users session to the corresponding user id
-     * use this method with caution
-     *
-     * @param $userId
-     */
-    protected function changeUserSession($userId)
-    {
-        //delete current session
-        $this->getXenforoModel('XenForo_Model_User')->deleteSessionActivity(0, $_SERVER['REMOTE_ADDR']);
-
-        $this->getSession()->changeUserId($userId);
-        $this->getVisitor()->setup($userId);
-    }
-
-    /**
-     * @param $model
-     * @return XenForo_Model
-     * @throws \XenForo_Exception
-     */
-    public function getXenforoModel($model)
-    {
-        return XenForo_Model::create($model);
-    }
-
-    /**
      * Retrieves XenForo Session
      *
      * @return mixed
@@ -388,6 +174,6 @@ class XF2Bridge
      */
     public function getSession()
     {
-        return \XF::app()::get('session');
+        return \XF::session();
     }
 }

@@ -1,17 +1,14 @@
-<?php namespace culv3r\XF2Bridge\Visitor;
+<?php
 
-use Illuminate\Auth\AuthenticationException;
+namespace swede2k\XF2Bridge\Visitor;
+
 use Illuminate\Contracts\Auth\Authenticatable;
-use culv3r\XF2Bridge\Contracts\VisitorInterface;
-use XenForo_Visitor;
 
-
-class Visitor implements VisitorInterface,Authenticatable
+class Visitor implements VisitorInterface, Authenticatable
 {
-
     public function getCurrentVisitor()
     {
-        return XenForo_Visitor::getInstance();
+        return \XF::visitor();
     }
 
     public function isBanned()
@@ -26,7 +23,7 @@ class Visitor implements VisitorInterface,Authenticatable
 
     public function isSuperAdmin()
     {
-        return (bool)$this->getCurrentVisitor()->isSuperAdmin();
+        return (bool)$this->getCurrentVisitor()->toArray()['is_super_admin'];
     }
 
     public function isLoggedIn()
@@ -103,5 +100,4 @@ class Visitor implements VisitorInterface,Authenticatable
             return $user[$key];
         }
     }
-
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace culv3r\XF2Bridge\Facades;
+namespace swede2k\XF2Bridge\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

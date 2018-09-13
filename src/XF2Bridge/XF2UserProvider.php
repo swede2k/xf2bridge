@@ -1,18 +1,10 @@
 <?php
-/**
- * Copyright (C) Stellaron, Inc - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by George Barba <george@agenaastro.com>, September 2017
- */
 
-namespace culv3r\XF2Bridge;
-
+namespace swede2k\XF2Bridge;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Auth\AuthenticationException;
-use culv3r\XF2Bridge\User\User;
 
 class XF2UserProvider implements UserProvider
 {
@@ -25,7 +17,7 @@ class XF2UserProvider implements UserProvider
 
     public function retrieveById($identifier)
     {
-        return new User($this->xenforo->getUserById($identifier));
+        return \XF::finder('XF:User')->where('user_id', $identifier)->fetchOne();
     }
 
     public function retrieveByToken($identifier, $token)
